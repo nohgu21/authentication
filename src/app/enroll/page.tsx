@@ -58,7 +58,7 @@ export default function EnrollPage() {
 
       {step === 1 && (
         <div className="flex flex-col gap-4 w-full max-w-sm">
-          <p className="text-sm text-[#86efac] text-center">Type the phrase above to record your first timing</p>
+          <p className="text-sm text-[#86efac] text-center">Type the phrase above to record your first timing <br/> <span className="text-[#f87171] text-sm">Must include spaces</span></p>
           <KeystrokeInput
             value={text}
             onChange={setText}
@@ -70,7 +70,7 @@ export default function EnrollPage() {
             disabled={text !== PHRASE}
             className="bg-[#1a1a1a] border border-[#2d2d2d] text-[#4ade80] text-sm px-4 py-2 rounded-sm hover:border-[#4ade80] transition-colors disabled:opacity-30"
           >
-            Next →
+            Next
           </button>
         </div>
       )}
@@ -89,7 +89,7 @@ export default function EnrollPage() {
             disabled={text !== PHRASE}
             className="bg-[#1a1a1a] border border-[#2d2d2d] text-[#4ade80] text-sm px-4 py-2 rounded-sm hover:border-[#4ade80] transition-colors disabled:opacity-30"
           >
-            Confirm Enrollment →
+            Confirm Enrollment
           </button>
         </div>
       )}
