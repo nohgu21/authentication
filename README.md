@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KeystrokeAuth
 
-## Getting Started
+A browser-based authentication demo that identifies users by the timing patterns of their keystrokes.
 
-First, run the development server:
+## How it works
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Most authentication systems ask *what* you type. KeystrokeAuth asks *how* you type it. Every person has a unique rhythm when typing — the time between keypresses, how long each key is held down, the natural cadence of their fingers. This app captures and compares those patterns to verify identity.
+
+No passwords are stored. No data leaves your browser.
+
+## Core concepts
+
+- **Dwell time** — how long a key is held down
+- **Flight time** — the gap between releasing one key and pressing the next
+- **Rhythm profile** — a timing fingerprint built from multiple keystrokes
+
+## Tech stack
+
+- [Next.js 15](https://nextjs.org/) — App Router
+- TypeScript
+- Tailwind CSS
+
+## Project structure
+```
+app/
+  enroll/
+    page.tsx          — record your keystroke rhythm (two attempts)
+  hooks/
+    useKeystroke.ts   — captures dwell and flight timings on every keypress
+  lib/
+    compareRhythm.ts  — compares two timing arrays and returns a similarity score (0–1)
+  components/
+    KeystrokeInput.tsx — input field that silently records keystroke timings
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting started
+```bash
+pnpm install
+pnpm dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Visit `localhost:3000/enroll` to register your rhythm.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Status
 
-## Learn More
+Work in progress. Homepage coming soon.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
