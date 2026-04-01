@@ -17,7 +17,6 @@ export default function HomePage() {
       </h1>
 
       <p className="text-[#94a3b8] text-sm text-center max-w-sm leading-relaxed">
-        Not what you type — but <span className="text-[#f0fdf4]">how</span> you type it. 
         We authenticate you using the unique timing patterns between your keystrokes.
       </p>
 
