@@ -71,7 +71,7 @@ export default function LoginPage() {
           disabled={text !== PHRASE || status === "analysing"}
           className="bg-[#1a1a1a] border border-[#2d2d2d] text-[#4ade80] text-sm px-4 py-2 rounded-sm hover:border-[#4ade80] transition-colors disabled:opacity-30"
         >
-          Authenticate →
+          Authenticate
         </button>
       </div>
 
