@@ -1,6 +1,6 @@
 "use client"
 
-import {useState, useRef} from "react"
+import React, {useState, useRef} from "react"
 
 interface KeyStrokeTiming {
     dwell: number
@@ -13,11 +13,13 @@ export default function useKeystroke() {
     const [timing, setTiming] = useState<KeyStrokeTiming[]>([])
     const lastKeyDownTime = useRef<number | null>(null)
 
-    const handleKeyDown = () => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") return
         lastKeyDownTime.current = performance.now()
     }
 
-    const handleKeyUp = () => {
+    const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") return
         if (lastKeyDownTime.current === null) return
 
         const now = performance.now()
@@ -41,5 +43,7 @@ export default function useKeystroke() {
     
     const reset = () => setTiming([])  
     return { timing, handleKeyDown, handleKeyUp, reset } 
+
+
 
 }

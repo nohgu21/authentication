@@ -1,18 +1,23 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { compareRhythm } from "../lib/compareRhythm";
 import KeystrokeInput from "../components/KeystrokeInput";
 
 const PHRASE = "open sesame rhythm"
 
+
+
 export default function EnrollPage() {
 
-  const [step, setStep] = useState <1 | 2>(1)
+  const [step, setStep] = useState<1 | 2>(1)
   const [text, setText] = useState("")
   const [firstTiming, setFirstTiming] = useState<any[]>([])
   const [secondTiming, setSecondTiming] = useState<any>([])
   const [status, setStatus] = useState<"idle" | "analysing" | "success" | "fail">("idle")
+
+  const router = useRouter()
 
   const handleFirstSubmit = () => {
     if (text !== PHRASE) return
@@ -28,19 +33,19 @@ export default function EnrollPage() {
     setTimeout(() => {
       const score = compareRhythm(firstTiming, secondTiming)
 
-    if (score < 0.5) {
-      setStatus("fail")
-      setTimeout(() => {
-        setStatus("idle")
-        setText("")
-        setStep(1)
-      }, 2000)
-      
-      return
-    }
+      if (score < 0.5) {
+        setStatus("fail")
+        setTimeout(() => {
+          setStatus("idle")
+          setText("")
+          setStep(1)
+        }, 2000)
 
-    localStorage.setItem("rhythmProfile", JSON.stringify(firstTiming))
-    setStatus("success")
+        return
+      }
+
+      localStorage.setItem("rhythmProfile", JSON.stringify(firstTiming))
+      setStatus("success")
 
     }, 1500)
 
@@ -49,7 +54,7 @@ export default function EnrollPage() {
 
   return (
     <main className="font-mono min-h-screen bg-[#0d0d0d] flex flex-col items-center justify-center gap-6 p-8">
-      
+
       <h1 className="text-2xl font-bold text-[#f0fdf4]">Enroll Your Rhythm</h1>
       <span className="text-[#4ade80] border border-[#2d2d2d] text-xs px-3 py-1 rounded-sm">
         STEP_{step === 1 ? "01" : "02"} / 02
@@ -58,12 +63,13 @@ export default function EnrollPage() {
 
       {step === 1 && (
         <div className="flex flex-col gap-4 w-full max-w-sm">
-          <p className="text-sm text-[#86efac] text-center">Type the phrase above to record your first timing <br/> <span className="text-[#f87171] text-sm">Must include spaces</span></p>
+          <p className="text-sm text-[#86efac] text-center">Type the phrase above to record your first timing <br /> <span className="text-[#f87171] text-sm">Must include spaces</span></p>
           <KeystrokeInput
             value={text}
             onChange={setText}
             onTimingUpdate={setFirstTiming}
             placeholder="Type here..."
+            onEnter={step === 1 ? handleFirstSubmit : handleSecondSubmit}
           />
           <button
             onClick={handleFirstSubmit}
@@ -83,6 +89,7 @@ export default function EnrollPage() {
             onChange={setText}
             onTimingUpdate={setSecondTiming}
             placeholder="Type again..."
+            onEnter={step === 2 ? handleFirstSubmit : handleSecondSubmit}
           />
           <button
             onClick={handleSecondSubmit}
@@ -102,12 +109,21 @@ export default function EnrollPage() {
       )}
 
       {status === "success" && (
-        <p className="font-mono text-[#4ade80] text-sm"> access granted.</p>
+        <div className="flex flex-col items-center gap-3">
+          <p className="font-mono text-[#4ade80] text-sm">access granted.</p>
+          <button
+            onClick={() => router.push("/login")}
+            className="bg-[#1a1a1a] border border-[#2d2d2d] text-[#4ade80] text-sm px-4 py-2 rounded-sm hover:border-[#4ade80] transition-colors"
+          >
+            Go to Login
+          </button>
+        </div>
       )}
 
       {status === "fail" && (
         <p className="font-mono text-[#f87171] text-sm"> mismatch detected. resetting...</p>
       )}
+
     </main>
   );
 }

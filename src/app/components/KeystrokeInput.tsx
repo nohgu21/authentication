@@ -8,13 +8,15 @@ interface KeystrokeInputProps {
     onChange: (value: string) => void
     onTimingUpdate: (timings: any[]) => void
     placeholder?: string
+    onEnter?: () => void
 }
 
 export default function KeystrokeInput ({
     value,
     onChange,
     onTimingUpdate,
-    placeholder
+    placeholder,
+    onEnter
 } : KeystrokeInputProps) {
 
     const {timing, handleKeyDown, handleKeyUp, reset} = useKeystroke()
@@ -24,12 +26,22 @@ export default function KeystrokeInput ({
         onTimingUpdate(timing)
     }
 
+     const handleKeyDownWrapper = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" && onEnter) {
+            onEnter()
+            return
+        }
+        handleKeyDown(e)
+    }
+
+    
+
     return (
         <input
         type = "password"
         value={value}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
+        onKeyDown={handleKeyDownWrapper}
         onKeyUp={handleKeyUp}
         placeholder={placeholder}
         className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
