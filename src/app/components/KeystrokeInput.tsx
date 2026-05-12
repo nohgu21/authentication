@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import useKeystroke  from "../hooks/useKeystroke"
+import useKeystroke from "../hooks/useKeystroke"
 
 interface KeystrokeInputProps {
     value: string
@@ -9,24 +9,25 @@ interface KeystrokeInputProps {
     onTimingUpdate: (timings: any[]) => void
     placeholder?: string
     onEnter?: () => void
+    type?: "text" | "password"
 }
 
-export default function KeystrokeInput ({
+export default function KeystrokeInput({
     value,
     onChange,
     onTimingUpdate,
     placeholder,
-    onEnter
-} : KeystrokeInputProps) {
+    onEnter,
+    type = "text"
+}: KeystrokeInputProps) {
 
-    const {timing, handleKeyDown, handleKeyUp, reset} = useKeystroke()
+    const { timing, handleKeyDown, handleKeyUp, reset } = useKeystroke()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value)
-        onTimingUpdate(timing)
     }
 
-     const handleKeyDownWrapper = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDownWrapper = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && onEnter) {
             onEnter()
             return
@@ -34,18 +35,20 @@ export default function KeystrokeInput ({
         handleKeyDown(e)
     }
 
-    
+    const handleKeyUpWrapper = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        handleKeyUp(e)
+        setTimeout(() => onTimingUpdate(timing), 0)
+    }
 
     return (
         <input
-        type = "password"
-        value={value}
-        onChange={handleChange}
-        onKeyDown={handleKeyDownWrapper}
-        onKeyUp={handleKeyUp}
-        placeholder={placeholder}
-        className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-
+            type={type}
+            value={value}
+            onChange={handleChange}
+            onKeyDown={handleKeyDownWrapper}
+            onKeyUp={handleKeyUpWrapper}
+            placeholder={placeholder}
+            className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
         />
     )
 }

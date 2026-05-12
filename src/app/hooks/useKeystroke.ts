@@ -41,6 +41,8 @@ export default function useKeystroke() {
     }
 
     
+
+    
     const reset = () => setTiming([])  
     return { timing, handleKeyDown, handleKeyUp, reset } 
 

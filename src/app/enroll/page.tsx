@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { compareRhythm } from "../lib/compareRhythm";
 import KeystrokeInput from "../components/KeystrokeInput";
+import { Eye, EyeOff } from "lucide-react"
 
 const PHRASE = "open sesame rhythm"
 
@@ -16,6 +17,7 @@ export default function EnrollPage() {
   const [firstTiming, setFirstTiming] = useState<any[]>([])
   const [secondTiming, setSecondTiming] = useState<any>([])
   const [status, setStatus] = useState<"idle" | "analysing" | "success" | "fail">("idle")
+  const [showPassword, setShowPassword] = useState(false)
 
   const router = useRouter()
 
@@ -51,6 +53,11 @@ export default function EnrollPage() {
 
   }
 
+  const toggleVisibility = () => {
+    setShowPassword((prev) => !prev)
+
+  }
+
 
   return (
     <main className="font-mono min-h-screen bg-[#0d0d0d] flex flex-col items-center justify-center gap-6 p-8">
@@ -64,13 +71,23 @@ export default function EnrollPage() {
       {step === 1 && (
         <div className="flex flex-col gap-4 w-full max-w-sm">
           <p className="text-sm text-[#86efac] text-center">Type the phrase above to record your first timing <br /> <span className="text-[#f87171] text-sm">Must include spaces</span></p>
+          <div className="relative w-full">
           <KeystrokeInput
             value={text}
             onChange={setText}
             onTimingUpdate={setFirstTiming}
+            type={showPassword ? "text" : "password"}
             placeholder="Type here..."
             onEnter={step === 1 ? handleFirstSubmit : handleSecondSubmit}
           />
+          <button
+            type="button"
+            onClick={toggleVisibility}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a3b8] hover:text-[#f0fdf4]"
+          >
+            {showPassword ? <Eye size={16}/> : <EyeOff size={16} />  }
+          </button>
+          </div>
           <button
             onClick={handleFirstSubmit}
             disabled={text !== PHRASE}
@@ -84,13 +101,23 @@ export default function EnrollPage() {
       {step === 2 && (
         <div className="flex flex-col gap-4 w-full max-w-sm">
           <p className="text-sm text-[#86efac] text-center">Type the phrase again to confirm your rhythm</p>
+          <div className="relative w-full">
           <KeystrokeInput
             value={text}
             onChange={setText}
             onTimingUpdate={setSecondTiming}
             placeholder="Type again..."
+            type={showPassword ? "text" : "password"}
             onEnter={step === 2 ? handleFirstSubmit : handleSecondSubmit}
           />
+          <button
+            type="button"
+            onClick={toggleVisibility}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a3b8] hover:text-[#f0fdf4]"
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+          </div>
           <button
             onClick={handleSecondSubmit}
             disabled={text !== PHRASE}
